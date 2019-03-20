@@ -1,0 +1,24 @@
+{
+  "name": "storybook-addon-json-schema",
+  "version": "1.0.0",
+  "description": "A storybook addon to display json schema and json data",
+  "scripts": {
+    "watch": "NODE_ENV=production babel src -d dist --watch"
+  },
+  "author": "Steffen Müller",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@storybook/addons": "^5.0.3",
+    "json-formatter-js": "^2.2.1",
+    "json-schema-ref-parser": "^6.1.0",
+    "json-schema-view-js": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.0",
+    "@babel/preset-env": "^7.4.0",
+    "@babel/preset-react": "^7.0.0"
+  }
+}
