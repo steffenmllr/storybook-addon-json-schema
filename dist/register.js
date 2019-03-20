@@ -14,6 +14,8 @@ var _jsonSchemaViewJs = _interopRequireDefault(require("json-schema-view-js"));
 
 var _jsonFormatterJs = _interopRequireDefault(require("json-formatter-js"));
 
+var _coreEvents = require("@storybook/core-events");
+
 var _style = require("./style");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -125,47 +127,39 @@ var Panel = function Panel(_ref2) {
       sample = _useState6[0],
       setSample = _useState6[1];
 
-  var stopListeningOnStory = null;
-
-  var onInit =
+  var onChange =
   /*#__PURE__*/
   function () {
     var _ref3 = _asyncToGenerator(
     /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee(data) {
-      var parsedSchema;
+    regeneratorRuntime.mark(function _callee(id) {
+      var storySchema, storySample, parsedSchema;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (data) {
-                _context.next = 2;
+              storySchema = api.getParameters(id, 'schema');
+              storySample = api.getParameters(id, 'sample');
+
+              if (!(!storySchema || !storySample)) {
+                _context.next = 6;
                 break;
               }
 
-              return _context.abrupt("return", setSchema(null));
-
-            case 2:
-              console.log('data', data);
-
-              if (!data.schema) {
-                _context.next = 8;
-                break;
-              }
-
-              _context.next = 6;
-              return _jsonSchemaRefParser.default.dereference(data.schema);
+              setSchema(null);
+              setSample(null);
+              return _context.abrupt("return");
 
             case 6:
-              parsedSchema = _context.sent;
-              setSchema(parsedSchema);
+              _context.next = 8;
+              return _jsonSchemaRefParser.default.dereference(storySchema);
 
             case 8:
-              if (data.sample) {
-                setSample(data.sample);
-              }
+              parsedSchema = _context.sent;
+              setSchema(parsedSchema);
+              setSample(storySample);
 
-            case 9:
+            case 11:
             case "end":
               return _context.stop();
           }
@@ -173,23 +167,16 @@ var Panel = function Panel(_ref2) {
       }, _callee);
     }));
 
-    return function onInit(_x) {
+    return function onChange(_x) {
       return _ref3.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    channel.on(_shared.ADDON_INIT, onInit);
-    stopListeningOnStory = api.onStory(function () {
-      return onInit({});
-    });
+    channel.on(_coreEvents.STORY_RENDERED, onChange);
     return function () {
-      if (stopListeningOnStory) {
-        stopListeningOnStory();
-      }
-
-      channel.removeListener(_shared.ADDON_INIT, onInit);
-    }; // Attach style, not pretty
+      channel.removeListener(_coreEvents.STORY_RENDERED, onChange);
+    };
   }, []);
 
   if (!schema || !sample || !active) {
@@ -205,11 +192,9 @@ var Panel = function Panel(_ref2) {
     schema: schema,
     sample: sample
   }));
-}; // https://storybook.js.org/addons/api/#addonapiregister
-
+};
 
 _addons.default.register(_shared.ADDON_ID, function (api) {
-  // Also need to set a unique name to the panel.
   _addons.default.addPanel(_shared.PANEL_ID, {
     title: _shared.PANEL_NAME,
     render: function render(_ref4) {

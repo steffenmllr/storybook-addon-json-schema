@@ -5,6 +5,7 @@ import { styled } from '@storybook/theming';
 import RefParser from 'json-schema-ref-parser';
 import JSONSchemaView from 'json-schema-view-js';
 import JSONFormatter from 'json-formatter-js'
+import { STORY_RENDERED } from '@storybook/core-events';
 
 import { style } from './style';
 
@@ -75,34 +76,25 @@ const SchemaView = ({ schema, sample }) => {
 const Panel = ({ api, active, channel }) => {
     const [schema, setSchema] = useState(null)
     const [sample, setSample] = useState(null)
-    let stopListeningOnStory = null
-
-    const onInit = async data => {
-        if (!data) return setSchema(null);
-        console.log('data', data)
-
-        if (data.schema) {
-            const parsedSchema = await RefParser.dereference(data.schema)
-            setSchema(parsedSchema)
+    const onChange = async id => {
+        const storySchema = api.getParameters(id, 'schema');
+        const storySample = api.getParameters(id, 'sample');
+        if (!storySchema || !storySample) {
+            setSchema(null);
+            setSample(null);
+            return;
         }
 
-        if (data.sample) {
-            setSample(data.sample);
-        }
-
+        const parsedSchema = await RefParser.dereference(storySchema)
+        setSchema(parsedSchema)
+        setSample(storySample);
     }
 
     useEffect(() => {
-        channel.on(ADDON_INIT, onInit)
-        stopListeningOnStory = api.onStory(() => onInit({}));
+        channel.on(STORY_RENDERED, onChange);
         return () => {
-            if (stopListeningOnStory) {
-                stopListeningOnStory()
-            }
-            channel.removeListener(ADDON_INIT, onInit)
+            channel.removeListener(STORY_RENDERED, onChange)
         }
-        // Attach style, not pretty
-
     }, []);
 
     if (!schema || !sample || !active) {
@@ -118,9 +110,7 @@ const Panel = ({ api, active, channel }) => {
     );
 };
 
-// https://storybook.js.org/addons/api/#addonapiregister
 addons.register(ADDON_ID, api => {
-    // Also need to set a unique name to the panel.
     addons.addPanel(PANEL_ID, {
         title: PANEL_NAME,
         render: ({ active }) => (
