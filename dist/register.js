@@ -2,7 +2,7 @@
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _addons = _interopRequireWildcard(require("@storybook/addons"));
+var _addons = _interopRequireDefault(require("@storybook/addons"));
 
 var _shared = require("./shared");
 

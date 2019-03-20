@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import addons, { types } from '@storybook/addons';
-import { ADDON_INIT, ADDON_ID, PANEL_ID, PANEL_NAME } from './shared';
+import addons from '@storybook/addons';
+import { ADDON_ID, PANEL_ID, PANEL_NAME } from './shared';
 import { styled } from '@storybook/theming';
 import RefParser from 'json-schema-ref-parser';
 import JSONSchemaView from 'json-schema-view-js';
