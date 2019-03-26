@@ -6,6 +6,7 @@ import RefParser from 'json-schema-ref-parser';
 import JSONSchemaView from 'json-schema-view-js';
 import JSONFormatter from 'json-formatter-js'
 import { STORY_RENDERED } from '@storybook/core-events';
+import { stringify } from 'flatted/esm';
 
 import { style } from './style';
 
@@ -62,11 +63,11 @@ const SchemaView = ({ schema, sample }) => {
 
                 <Row>
                     <div style={{ display: showRow ? 'none' : 'block' }} ref={schemaEl} />
-                    <TextArea style={{ display: showRow ? 'block' : 'none' }}>{JSON.stringify(schema, null, 4)}</TextArea>
+                    <TextArea style={{ display: showRow ? 'block' : 'none' }}>{stringify(schema, null, 4)}</TextArea>
                 </Row>
                 <Row style={{ background: '#222' }}>
                     <div style={{ display: showRow ? 'none' : 'block' }} ref={sampleEl} />
-                    <TextArea style={{ display: showRow ? 'block' : 'none' }}>{JSON.stringify(sample, null, 4)}</TextArea>
+                    <TextArea style={{ display: showRow ? 'block' : 'none' }}>{stringify(sample, null, 4)}</TextArea>
                 </Row>
             </Wrapper>
         </Fragment>

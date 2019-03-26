@@ -16,6 +16,8 @@ var _jsonFormatterJs = _interopRequireDefault(require("json-formatter-js"));
 
 var _coreEvents = require("@storybook/core-events");
 
+var _esm = require("flatted/esm");
+
 var _style = require("./style");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -96,7 +98,7 @@ var SchemaView = function SchemaView(_ref) {
     style: {
       display: showRow ? 'block' : 'none'
     }
-  }, JSON.stringify(schema, null, 4))), _react.default.createElement(Row, {
+  }, (0, _esm.stringify)(schema, null, 4))), _react.default.createElement(Row, {
     style: {
       background: '#222'
     }
@@ -109,7 +111,7 @@ var SchemaView = function SchemaView(_ref) {
     style: {
       display: showRow ? 'block' : 'none'
     }
-  }, JSON.stringify(sample, null, 4)))));
+  }, (0, _esm.stringify)(sample, null, 4)))));
 };
 
 var Panel = function Panel(_ref2) {
