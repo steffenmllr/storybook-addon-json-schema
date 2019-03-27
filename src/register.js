@@ -86,7 +86,11 @@ const Panel = ({ api, active, channel }) => {
             return;
         }
 
-        const parsedSchema = await RefParser.dereference(storySchema)
+        const parsedSchema = await RefParser.dereference(storySchema, {
+            dereference: {
+                circular: false
+            }
+        })
         setSchema(parsedSchema)
         setSample(storySample);
     }

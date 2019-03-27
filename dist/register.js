@@ -154,7 +154,11 @@ var Panel = function Panel(_ref2) {
 
             case 6:
               _context.next = 8;
-              return _jsonSchemaRefParser.default.dereference(storySchema);
+              return _jsonSchemaRefParser.default.dereference(storySchema, {
+                dereference: {
+                  circular: false
+                }
+              });
 
             case 8:
               parsedSchema = _context.sent;
